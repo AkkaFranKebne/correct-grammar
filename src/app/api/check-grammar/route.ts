@@ -6,9 +6,9 @@ export const runtime = "edge";
 
 export async function POST(req: Request) {
   try {
-    const { text } = await req.json();
+    const { prompt } = await req.json();
 
-    if (!text) {
+    if (!prompt) {
       return NextResponse.json({ error: "No text provided" }, { status: 400 });
     }
 
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
         },
         {
           role: "user",
-          content: `Please correct the grammar and orthography in the following text: "${text}"`,
+          content: `Please correct the grammar and orthography in the following text: "${prompt}"`,
         },
       ],
     });

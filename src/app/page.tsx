@@ -1,4 +1,5 @@
-import GrammarChecker from "../components/GrammarChecker";
+import GrammarChecker from "@/components/GrammarChecker";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export default function Home() {
   return (
@@ -6,7 +7,9 @@ export default function Home() {
       <h1 className="text-2xl font-bold mb-4">
         Grammar and Orthography Checker
       </h1>
-      <GrammarChecker />
+      <ErrorBoundary>
+        <GrammarChecker />
+      </ErrorBoundary>
     </main>
   );
 }
