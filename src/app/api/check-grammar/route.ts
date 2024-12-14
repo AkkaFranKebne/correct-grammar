@@ -25,7 +25,6 @@ export async function POST(req: Request) {
           content: `Please correct the grammar and orthography in the following text, provide the corrected text only, without any explanations: "${prompt}"`,
         },
       ],
-      temperature: 0.7,
     });
 
     return result.toDataStreamResponse();
