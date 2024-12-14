@@ -1,38 +1,36 @@
-import { streamText } from "ai";
-import { openai } from "@ai-sdk/openai";
 import { NextResponse } from "next/server";
+import OpenAI from "openai";
 
 export const runtime = "edge";
 
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+
 export async function POST(req: Request) {
   try {
-    const { prompt } = await req.json();
+    const { messages } = await req.json();
 
-    if (!prompt) {
+    if (!messages) {
       return NextResponse.json({ error: "No text provided" }, { status: 400 });
     }
 
-    const result = await streamText({
-      model: openai("gpt-3.5-turbo"),
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are a helpful assistant that corrects grammar and orthography. Provide the corrected text only, without any explanations.",
-        },
-        {
-          role: "user",
-          content: `Please correct the grammar and orthography in the following text: "${prompt}"`,
-        },
-      ],
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: messages,
+      response_format: {
+        type: "text",
+      },
+      temperature: 1,
+      max_completion_tokens: 2048,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
     });
 
-    return result.toDataStreamResponse();
+    return NextResponse.json({ ...response }, { status: 200 });
   } catch (error) {
     console.error("API error:", error);
-    return NextResponse.json(
-      { error: "An error occurred while processing your request" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }
