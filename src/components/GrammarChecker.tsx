@@ -1,27 +1,41 @@
 "use client";
 
-import { useState, useRef, KeyboardEvent } from "react";
+import { useState, useRef, KeyboardEvent, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle, Copy, CheckCircle2 } from "lucide-react";
+import { AlertCircle, Copy, CheckCircle2, X } from "lucide-react";
 import { useCompletion } from "ai/react";
 
 export default function GrammarChecker() {
   const [inputText, setInputText] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isInputExpanded, setIsInputExpanded] = useState(false);
+  const [isOutputExpanded, setIsOutputExpanded] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const outputRef = useRef<HTMLDivElement>(null);
 
-  const { complete, completion, isLoading } = useCompletion({
+  const { complete, completion, isLoading, setCompletion } = useCompletion({
     api: "/api/check-grammar",
     onError: (error) => {
       console.error("Error:", error);
       setError("An error occurred while checking the text. Please try again.");
     },
   });
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      setIsInputExpanded(textareaRef.current.scrollHeight > 160);
+    }
+  }, [inputText]);
+
+  useEffect(() => {
+    if (outputRef.current) {
+      setIsOutputExpanded(outputRef.current.scrollHeight > 160);
+    }
+  }, [completion]);
 
   const handleCheck = () => {
     if (!inputText.trim()) {
@@ -47,6 +61,19 @@ export default function GrammarChecker() {
     }
   };
 
+  const handleClearInput = () => {
+    setInputText("");
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
+    setIsInputExpanded(false);
+  };
+
+  const handleClearOutput = () => {
+    setCompletion("");
+    setIsOutputExpanded(false);
+  };
+
   return (
     <div className="space-y-4">
       {error && (
@@ -59,11 +86,21 @@ export default function GrammarChecker() {
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Input Text</CardTitle>
+            <CardTitle className="flex justify-between items-center">
+              Input Text
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleClearInput}
+                disabled={!inputText}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </CardTitle>
           </CardHeader>
           <CardContent
             className={`transition-all duration-300 ease-in-out ${
-              isExpanded ? "h-auto" : "h-40"
+              isInputExpanded ? "h-auto" : "h-40"
             }`}
           >
             <Textarea
@@ -72,11 +109,12 @@ export default function GrammarChecker() {
               value={inputText}
               onChange={(e) => {
                 setInputText(e.target.value);
-                setIsExpanded(e.target.scrollHeight > 160);
+                e.target.style.height = "auto";
+                e.target.style.height = `${e.target.scrollHeight}px`;
               }}
               onKeyDown={handleKeyDown}
-              className={`h-full resize-none ${
-                isExpanded ? "min-h-[10rem]" : ""
+              className={`h-full resize-none text-sm text-gray-900 ${
+                isInputExpanded ? "min-h-[10rem]" : ""
               }`}
             />
             <Button onClick={handleCheck} disabled={isLoading} className="mt-2">
@@ -88,28 +126,39 @@ export default function GrammarChecker() {
           <CardHeader>
             <CardTitle className="flex justify-between items-center">
               Corrected Text
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleCopy}
-                disabled={!completion}
-              >
-                {isCopied ? (
-                  <CheckCircle2 className="h-4 w-4" />
-                ) : (
-                  <Copy className="h-4 w-4" />
-                )}
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleCopy}
+                  disabled={!completion}
+                >
+                  {isCopied ? (
+                    <CheckCircle2 className="h-4 w-4" />
+                  ) : (
+                    <Copy className="h-4 w-4" />
+                  )}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleClearOutput}
+                  disabled={!completion}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
             </CardTitle>
           </CardHeader>
           <CardContent
             className={`transition-all duration-300 ease-in-out ${
-              isExpanded ? "h-auto" : "h-40"
+              isOutputExpanded ? "h-auto" : "h-40"
             }`}
           >
             <div
-              className={`p-2 border rounded-md overflow-auto ${
-                isExpanded ? "min-h-[10rem]" : "h-full"
+              ref={outputRef}
+              className={`p-2 border rounded-md overflow-auto text-sm text-gray-900 ${
+                isOutputExpanded ? "min-h-[10rem]" : "h-full"
               }`}
             >
               {completion || "Corrected text will appear here..."}
