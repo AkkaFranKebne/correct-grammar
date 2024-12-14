@@ -99,7 +99,7 @@ export default function GrammarChecker() {
             </CardTitle>
           </CardHeader>
           <CardContent
-            className={`transition-all duration-300 ease-in-out ${
+            className={`flex flex-col transition-all duration-300 ease-in-out ${
               isInputExpanded ? "h-auto" : "h-40"
             }`}
           >
@@ -113,11 +113,15 @@ export default function GrammarChecker() {
                 e.target.style.height = `${e.target.scrollHeight}px`;
               }}
               onKeyDown={handleKeyDown}
-              className={`h-full resize-none text-sm text-gray-900 ${
+              className={`flex-grow resize-none text-sm text-gray-900 ${
                 isInputExpanded ? "min-h-[10rem]" : ""
               }`}
             />
-            <Button onClick={handleCheck} disabled={isLoading} className="mt-2">
+            <Button
+              onClick={handleCheck}
+              disabled={isLoading}
+              className="mt-2 self-start"
+            >
               {isLoading ? "Checking..." : "Check Grammar"}
             </Button>
           </CardContent>
@@ -151,14 +155,14 @@ export default function GrammarChecker() {
             </CardTitle>
           </CardHeader>
           <CardContent
-            className={`transition-all duration-300 ease-in-out ${
+            className={`flex flex-col transition-all duration-300 ease-in-out ${
               isOutputExpanded ? "h-auto" : "h-40"
             }`}
           >
             <div
               ref={outputRef}
-              className={`p-2 border rounded-md overflow-auto text-sm text-gray-900 ${
-                isOutputExpanded ? "min-h-[10rem]" : "h-full"
+              className={`flex-grow p-2 border rounded-md overflow-auto text-sm text-gray-900 ${
+                isOutputExpanded ? "min-h-[10rem]" : ""
               }`}
             >
               {completion || "Corrected text will appear here..."}
