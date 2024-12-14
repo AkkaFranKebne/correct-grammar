@@ -22,7 +22,7 @@ export async function POST(req: Request) {
         },
         {
           role: "user",
-          content: `Please correct the grammar and orthography in the following text, provide the corrected text only, without any explanations: "${prompt}"`,
+          content: `Please correct the grammar and orthography in the following text, provide the corrected text only, without any explanations: ${prompt}`,
         },
       ],
     });
