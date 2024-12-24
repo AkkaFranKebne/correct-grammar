@@ -12,6 +12,10 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "No text provided" }, { status: 400 });
     }
 
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error("OPENAI_API_KEY is not set");
+    }
+
     const result = await streamText({
       model: openai("gpt-3.5-turbo"),
       messages: [
