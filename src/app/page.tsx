@@ -1,15 +1,36 @@
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import AccessRequestForm from "@/components/AccessRequestForm";
 import GrammarChecker from "@/components/GrammarChecker";
-import ErrorBoundary from "@/components/ErrorBoundary";
 
-export default function Home() {
-  return (
-    <main className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">
-        Grammar and Orthography Checker
-      </h1>
-      <ErrorBoundary>
-        <GrammarChecker />
-      </ErrorBoundary>
-    </main>
-  );
+export default async function Home() {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    return (
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">Welcome to Grammar Checker</h1>
+        <p className="mb-4">
+          Please request access to use our grammar checking tool.
+        </p>
+        <AccessRequestForm />
+      </div>
+    );
+  }
+
+  if (
+    (session?.user as { accessStatus?: string })?.accessStatus !== "APPROVED"
+  ) {
+    return (
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">Access Pending</h1>
+        <p>
+          Your access request is being reviewed. We'll notify you once it's
+          approved.
+        </p>
+      </div>
+    );
+  }
+
+  return <GrammarChecker />;
 }
