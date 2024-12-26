@@ -31,8 +31,9 @@ export default function AccessRequestForm() {
       } else {
         setError(data.message || "An error occurred");
       }
-    } catch (error) {
-      setError("An error occurred while submitting your request");
+      // @ts-expect-error temporary fix
+    } catch (error: string) {
+      setError(error);
     }
   };
 

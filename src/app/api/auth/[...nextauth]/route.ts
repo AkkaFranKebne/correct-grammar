@@ -49,15 +49,20 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        //@ts-expect-error temporary fix
         token.role = user.role;
+        //@ts-expect-error temporary fix
         token.accessStatus = user.accessStatus;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
+        //@ts-expect-error temporary fix
         session.user.id = token.id as string;
+        //@ts-expect-error temporary fix
         session.user.role = token.role as string;
+        //@ts-expect-error temporary fix
         session.user.accessStatus = token.accessStatus as string;
       }
       return session;

@@ -7,7 +7,7 @@ import { sendEmail } from "@/lib/email";
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const session = await getServerSession(authOptions);
 
-  //@ts-ignore
+  //@ts-expect-error  temporary fix
   if (!session || session?.user?.role !== "ADMIN") {
     return NextResponse.json({ message: "Forbidden" }, { status: 403 });
   }

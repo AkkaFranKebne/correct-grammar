@@ -26,7 +26,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         },
       ],
     });
-    //@ts-ignore
+    //@ts-expect-error  temporary fix
     return result.toDataStreamResponse();
   } catch (error) {
     console.error("API error:", error);

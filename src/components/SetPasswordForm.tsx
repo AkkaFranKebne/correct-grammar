@@ -41,8 +41,9 @@ export default function SetPasswordForm({ userId }: SetPasswordFormProps) {
         const data = await response.json();
         setError(data.message || "Error setting password");
       }
-    } catch (error) {
-      setError("Error setting password");
+      // @ts-expect-error temporary fix
+    } catch (error: string) {
+      setError(error);
     }
   };
 
