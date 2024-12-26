@@ -20,40 +20,45 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          console.log("Missing credentials");
           return null;
         }
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
         if (!user || !user.password) {
-          console.log("User not found or password not set");
-          return null;
+          throw new Error("User not found");
         }
         const isPasswordValid = await bcrypt.compare(
           credentials.password,
           user.password
         );
         if (!isPasswordValid) {
-          console.log("Invalid password");
           return null;
         }
-        console.log("Authentication successful");
-        return user;
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          accessStatus: user.accessStatus,
+        };
       },
     }),
   ],
   callbacks: {
-    async signIn({ user }) {
-      const dbUser = await prisma.user.findUnique({
-        where: { email: user.email! },
-      });
-      return dbUser?.accessStatus === "APPROVED";
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role;
+        token.accessStatus = user.accessStatus;
+      }
+      return token;
     },
-    async session({ session, user }) {
+    async session({ session, token }) {
       if (session.user) {
-        session.user.role = user.role as string;
-        session.user.accessStatus = user.accessStatus as string;
+        session.user.id = token.id as string;
+        session.user.role = token.role as string;
+        session.user.accessStatus = token.accessStatus as string;
       }
       return session;
     },
@@ -62,6 +67,10 @@ export const authOptions: NextAuthOptions = {
     signIn: "/auth/signin",
     error: "/auth/error",
   },
+  session: {
+    strategy: "jwt",
+  },
+  debug: process.env.NODE_ENV === "development",
 };
 
 const handler = NextAuth(authOptions);

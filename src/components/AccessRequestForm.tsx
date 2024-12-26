@@ -4,21 +4,36 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function AccessRequestForm() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const response = await fetch("/api/request-access", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, name }),
-    });
-    const data = await response.json();
-    setMessage(data.message);
+    setMessage("");
+    setError("");
+
+    try {
+      const response = await fetch("/api/request-access", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, name }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setMessage(data.message);
+        setEmail("");
+        setName("");
+      } else {
+        setError(data.message || "An error occurred");
+      }
+    } catch (error) {
+      setError("An error occurred while submitting your request");
+    }
   };
 
   return (
@@ -44,7 +59,16 @@ export default function AccessRequestForm() {
         />
       </div>
       <Button type="submit">Request Access</Button>
-      {message && <p className="mt-4">{message}</p>}
+      {message && (
+        <Alert>
+          <AlertDescription>{message}</AlertDescription>
+        </Alert>
+      )}
+      {error && (
+        <Alert variant="destructive">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
     </form>
   );
 }

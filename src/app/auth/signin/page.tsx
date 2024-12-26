@@ -2,15 +2,19 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import AccessRequestForm from "@/components/AccessRequestForm";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [showAccessRequest, setShowAccessRequest] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,9 +27,27 @@ export default function SignIn() {
     });
 
     if (result?.error) {
-      setError("Invalid email or password");
+      if (result.error === "User not found") {
+        setShowAccessRequest(true);
+      } else {
+        setError("Invalid email or password");
+      }
+    } else if (result?.ok) {
+      router.push("/");
     }
   };
+
+  if (showAccessRequest) {
+    return (
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">Request Access</h1>
+        <AccessRequestForm />
+        <Button onClick={() => setShowAccessRequest(false)} className="mt-4">
+          Back to Sign In
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -59,8 +81,11 @@ export default function SignIn() {
         </Alert>
       )}
       <div className="mt-4">
-        <Button variant="outline" onClick={() => signIn("email")}>
+        {/*       <Button variant="outline" onClick={() => signIn("email")}>
           Sign In with Email Link
+        </Button> */}
+        <Button variant="secondary" onClick={() => setShowAccessRequest(true)}>
+          Request Access
         </Button>
       </div>
     </div>

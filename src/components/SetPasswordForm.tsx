@@ -6,7 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-export default function SetPasswordForm() {
+interface SetPasswordFormProps {
+  userId: string;
+}
+
+export default function SetPasswordForm({ userId }: SetPasswordFormProps) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -26,7 +30,7 @@ export default function SetPasswordForm() {
       const response = await fetch("/api/set-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ userId, password }),
       });
 
       if (response.ok) {

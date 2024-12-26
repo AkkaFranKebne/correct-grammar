@@ -7,12 +7,16 @@ import { authOptions } from "../auth/[...nextauth]/route";
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const session = await getServerSession(authOptions);
 
-  if (!session || session.user.accessStatus !== "APPROVED") {
+  if (!session || !session.user) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    const { password } = await req.json();
+    const { userId, password } = await req.json();
+
+    if (userId !== session.user.id) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
 
     if (!password || password.length < 8) {
       return NextResponse.json(
@@ -24,7 +28,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await prisma.user.update({
-      where: { email: session.user.email! },
+      where: { id: userId },
       data: { password: hashedPassword },
     });
 
