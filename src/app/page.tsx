@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "./api/auth/[...nextauth]/authOptions";
 import GrammarChecker from "@/components/GrammarChecker";
 import SetPasswordForm from "@/components/SetPasswordForm";
 import prisma from "@/lib/prisma";
@@ -11,7 +11,7 @@ export default async function Home() {
   if (!session || !session.user) {
     redirect("/auth/signin");
   }
-  //@ts-expect-error temporary fix
+  //@ts-expect-error  temporary fix
   if (session.user.accessStatus !== "APPROVED") {
     return (
       <div className="container mx-auto p-4">
@@ -25,7 +25,7 @@ export default async function Home() {
   }
 
   const user = await prisma.user.findUnique({
-    //@ts-expect-error temporary fix
+    //@ts-expect-error  temporary fix
     where: { id: session.user.id },
     select: { password: true },
   });
@@ -38,7 +38,7 @@ export default async function Home() {
           Please set a password to access the Grammar Checker.
         </p>
         <SetPasswordForm
-          //@ts-expect-error temporary fix
+          //@ts-expect-error  temporary fix
           userId={session.user.id}
         />
       </div>

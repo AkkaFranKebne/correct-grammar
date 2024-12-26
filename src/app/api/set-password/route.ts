@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcrypt";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "../auth/[...nextauth]/authOptions";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const session = await getServerSession(authOptions);
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   try {
     const { userId, password } = await req.json();
-
+    //@ts-expect-error  temporary fix
     if (userId !== session.user.id) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
