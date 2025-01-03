@@ -1,9 +1,12 @@
-import type { NextConfig } from "next";
-
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
+  //@ts-expect-error temporary fix for the error
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      require("./prisma");
+    }
+    return config;
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

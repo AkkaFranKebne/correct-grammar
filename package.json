@@ -3,15 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "prisma generate && next build",
+    "dev": "next dev",
+    "build": "npm run prisma:generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "prisma:seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts",
-    "postinstall": "prisma generate --schema=./prisma/schema.prisma"
+    "prisma:generate": "prisma generate",
+    "postinstall": "npm run prisma:generate"
   },
   "prisma": {
-    "seed": "npm run prisma:seed"
+    "schema": "./prisma/schema.prisma"
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.0.8",
@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
-    "prisma": "^4.14.0",
+    "eslint": "^9.17.0",
     "ts-node": "^10.9.1"
   }
 }
