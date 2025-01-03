@@ -1,5 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
+
+// Load environment variables
+dotenv.config();
 
 const prisma = new PrismaClient();
 
@@ -7,6 +11,12 @@ async function main() {
   try {
     const adminEmail = process.env.ADMIN_EMAIL;
     const adminPassword = process.env.ADMIN_PASSWORD;
+
+    if (!adminEmail || !adminPassword) {
+      throw new Error(
+        "ADMIN_EMAIL and ADMIN_PASSWORD must be set in environment variables"
+      );
+    }
 
     // Check if admin user already exists
     const existingAdmin = await prisma.user.findUnique({
