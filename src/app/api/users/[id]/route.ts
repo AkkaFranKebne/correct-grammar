@@ -4,10 +4,8 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../auth/[...nextauth]/authOptions";
 import { sendEmail } from "@/lib/email";
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-): Promise<NextResponse> {
+export async function DELETE(request: NextRequest, props: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+  const params = await props.params;
   const session = await getServerSession(authOptions);
 
   //@ts-expect-error  temporary fix
