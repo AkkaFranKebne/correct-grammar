@@ -21,12 +21,14 @@ export default function SetPasswordForm({ userId }: SetPasswordFormProps) {
     setMessage("");
     setError("");
 
+    // Check if the password and confirmPassword values match
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
     try {
+      // An asynchronous fetch request to the /api/set-password endpoint
       const response = await fetch("/api/set-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

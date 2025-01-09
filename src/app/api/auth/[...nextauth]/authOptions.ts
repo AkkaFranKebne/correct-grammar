@@ -5,6 +5,10 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/lib/prisma";
 import bcrypt from "bcrypt";
 
+/*
+Configuration used by NextAuth to handle user sign-in, sign-out, and session management
+*/
+
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -18,6 +22,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
+      // the function to handle user authentication
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           return null;

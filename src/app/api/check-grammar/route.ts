@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server"; // used to handle incoming HTTP requests and send responses in a Next.js API route.
 import { streamText } from "ai";
 import { openai } from "@ai-sdk/openai";
 
@@ -6,12 +6,14 @@ export const runtime = "edge";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
+    // Parse the JSON body of the incoming request to extract the prompt field
     const { prompt } = await req.json();
 
     if (!prompt) {
       return NextResponse.json({ error: "No text provided" }, { status: 400 });
     }
 
+    // call Open AI API to correct the grammar and orthography in the provided text
     const result = await streamText({
       model: openai("gpt-3.5-turbo"),
       messages: [

@@ -17,6 +17,7 @@ export default function AdminPanel({ initialUsers }: { initialUsers: User[] }) {
 
   const addUser = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Send a POST request to the /api/users endpoint with the new user's email in the request body.
     const response = await fetch("/api/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -28,6 +29,7 @@ export default function AdminPanel({ initialUsers }: { initialUsers: User[] }) {
   };
 
   const removeUser = async (userId: string) => {
+    // Send a DELETE request to the /api/users/${userId} endpoint.
     await fetch(`/api/users/${userId}`, { method: "DELETE" });
     setUsers(users.filter((user) => user.id !== userId));
   };

@@ -1,3 +1,8 @@
+
+/*
+Automates the generation of Prisma client code based on the Prisma schema. 
+*/
+
 const { exec } = require('child_process');
 const path = require('path');
 

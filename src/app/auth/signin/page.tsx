@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation"; // allows you to programmatically change routes inside Client Components.
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,6 +20,7 @@ export default function SignIn() {
     e.preventDefault();
     setError("");
 
+    // attempt to sign in using the signIn function with credentials
     const result = await signIn("credentials", {
       email,
       password,
@@ -28,15 +29,18 @@ export default function SignIn() {
 
     if (result?.error) {
       if (result.error === "User not found") {
+        // if the user is not found, show the access request form
         setShowAccessRequest(true);
       } else {
         setError("Invalid email or password");
       }
+      // redirect user to the home page if sign in is successful
     } else if (result?.ok) {
       router.push("/");
     }
   };
 
+  // if the user is not found, show the access request form
   if (showAccessRequest) {
     return (
       <div className="container mx-auto p-4">
@@ -49,6 +53,7 @@ export default function SignIn() {
     );
   }
 
+  // sign in form
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Sign In</h1>

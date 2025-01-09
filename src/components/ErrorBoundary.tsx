@@ -4,6 +4,13 @@ import React, { ErrorInfo, ReactNode } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
+/*
+ Catches JavaScript errors anywhere in its child component tree, log those errors, and display a fallback UI instead of crashing the entire application.
+ It catches errors in the child components using the componentDidCatch lifecycle method.
+ Written as a class component because, as of now, error boundaries in React can only be implemented using class components. 
+ Functional components do not support the componentDidCatch lifecycle method, which is essential for catching errors in the component tree.
+ */
+
 interface ErrorBoundaryProps {
   children: ReactNode;
 }

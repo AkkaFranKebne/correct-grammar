@@ -1,6 +1,10 @@
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcrypt";
-import dotenv from "dotenv";
+import bcrypt from "bcrypt"; // A library for hashing passwords.
+import dotenv from "dotenv"; // A library to load environment variables from a .env file.
+
+/* 
+populate the database with initial data (seed data) using Prisma Client  
+*/
 
 // Load environment variables
 dotenv.config();
@@ -9,6 +13,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   try {
+    // retreive admin's credentials from environment variables
     const adminEmail = process.env.ADMIN_EMAIL;
     const adminPassword = process.env.ADMIN_PASSWORD;
 
@@ -18,7 +23,7 @@ async function main() {
       );
     }
 
-    // Check if admin user already exists
+    // Check if admin user already exists in the database
     const existingAdmin = await prisma.user.findUnique({
       where: { email: adminEmail },
     });
@@ -27,7 +32,9 @@ async function main() {
       console.log("Admin user already exists. Skipping creation.");
     } else {
       // Create admin user
+      // Hash the password before storing it in the database
       const hashedPassword = await bcrypt.hash(adminPassword, 10);
+      // Create the admin user in the database
       const adminUser = await prisma.user.create({
         data: {
           email: adminEmail,

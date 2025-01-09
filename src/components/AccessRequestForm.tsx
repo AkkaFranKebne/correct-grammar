@@ -18,6 +18,7 @@ export default function AccessRequestForm() {
     setError("");
 
     try {
+      // An asynchronous fetch request to the /api/request-access endpoint
       const response = await fetch("/api/request-access", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
