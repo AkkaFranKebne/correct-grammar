@@ -5,6 +5,15 @@ import GrammarChecker from "@/components/GrammarChecker";
 import SetPasswordForm from "@/components/SetPasswordForm";
 import prisma from "@/lib/prisma";
 
+/*
+Server Component in Next.js App Router.
+Server Components can directly access the database because they run on the server.
+This approach is more efficient as it eliminates the need for an additional API call.
+It's secure because the database call never reaches the client-side code.
+
+For server components (like pages or layouts in the App Router), use direct database access when possible.
+*/
+
 export default async function Home() {
   // retrieve the current user's session on the server side.
   const session = await getServerSession(authOptions);

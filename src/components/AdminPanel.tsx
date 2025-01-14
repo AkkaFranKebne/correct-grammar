@@ -5,6 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+/*
+Client Component, which cannot directly access the server-side resources.
+Client Components need to make API calls to interact with the server and database.
+This approach provides a clear separation of concerns and can be reused by other client components.
+It allows for easier testing and mocking of the API
+
+API route approach sis necessary for client-side components that need to interact with the server. It's particularly useful for:
+
+1. Dynamic data fetching based on user interactions.
+2. Operations that need to be performed after the initial page load.
+3. Reusable API endpoints that might be called from multiple components or even external services.
+*/
+
 type User = {
   id: string;
   email: string;
