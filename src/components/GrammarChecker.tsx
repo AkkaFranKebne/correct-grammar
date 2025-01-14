@@ -70,18 +70,14 @@ export default function GrammarChecker() {
     }
   };
 
-  const handleClearInput = () => {
-    // clear state and reset textarea height
+  const handleClear = () => {
+    // clear input text, completion, and reset the textarea height
     setInputText("");
+    setCompletion("");
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
     }
     setIsInputExpanded(false);
-  };
-
-  const handleClearOutput = () => {
-    // clear corrected text and reset output div height
-    setCompletion("");
     setIsOutputExpanded(false);
   };
 
@@ -102,8 +98,8 @@ export default function GrammarChecker() {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={handleClearInput}
-                disabled={!inputText}
+                onClick={handleClear}
+                disabled={!inputText && !completion}
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -158,8 +154,8 @@ export default function GrammarChecker() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={handleClearOutput}
-                  disabled={!completion}
+                  onClick={handleClear}
+                  disabled={!inputText && !completion}
                 >
                   <X className="h-4 w-4" />
                 </Button>
