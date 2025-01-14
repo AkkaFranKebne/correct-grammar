@@ -106,7 +106,7 @@ export default function GrammarChecker() {
             </CardTitle>
           </CardHeader>
           <CardContent
-            className={`flex flex-col transition-all duration-300 ease-in-out ${
+            className={`flex flex-col transition-all duration-300 ease-in-out  ${
               isInputExpanded ? "h-auto" : "h-40"
             }`}
           >
@@ -121,7 +121,7 @@ export default function GrammarChecker() {
                 e.target.style.height = `${e.target.scrollHeight}px`;
               }}
               onKeyDown={handleKeyDown}
-              className={`flex-grow resize-none text-sm text-gray-900 ${
+              className={`flex-grow resize-none text-sm text-gray-900 border-none shadow-none ${
                 isInputExpanded ? "min-h-[10rem]" : ""
               }`}
             />
@@ -169,7 +169,7 @@ export default function GrammarChecker() {
           >
             <div
               ref={outputRef}
-              className={`flex-grow p-2 border rounded-md overflow-auto text-sm text-gray-900 ${
+              className={`flex-grow p-2 rounded-md overflow-auto text-sm text-gray-900 ${
                 isOutputExpanded ? "min-h-[10rem]" : ""
               }`}
             >
