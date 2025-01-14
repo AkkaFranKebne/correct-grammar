@@ -93,20 +93,21 @@ export default function GrammarChecker() {
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle className="flex justify-between items-center">
+            <CardTitle className="flex justify-between items-center text-lg font-semibold text-gray-900">
               Input Text
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={handleClear}
                 disabled={!inputText && !completion}
+                aria-label="Clear input and output"
               >
                 <X className="h-4 w-4" />
               </Button>
             </CardTitle>
           </CardHeader>
           <CardContent
-            className={`flex flex-col transition-all duration-300 ease-in-out  ${
+            className={`flex flex-col transition-all duration-300 ease-in-out bg-gray-50 ${
               isInputExpanded ? "h-auto" : "h-40"
             }`}
           >
@@ -121,14 +122,19 @@ export default function GrammarChecker() {
                 e.target.style.height = `${e.target.scrollHeight}px`;
               }}
               onKeyDown={handleKeyDown}
-              className={`flex-grow resize-none text-sm text-gray-900 border-none shadow-none ${
+              className={`flex-grow resize-none text-base text-gray-900 border-none shadow-none bg-gray-50 focus:ring-2 focus:ring-blue-500 ${
                 isInputExpanded ? "min-h-[10rem]" : ""
               }`}
+              aria-label="Input text for grammar checking"
+              aria-describedby="input-description"
             />
+            <span id="input-description" className="sr-only">
+              Enter the text you want to check for grammar and spelling
+            </span>
             <Button
               onClick={handleCheck}
               disabled={isLoading}
-              className="mt-2 self-start"
+              className="mt-2 self-start bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               {isLoading ? "Checking..." : "Check Grammar"}
             </Button>
@@ -136,7 +142,7 @@ export default function GrammarChecker() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className="flex justify-between items-center">
+            <CardTitle className="flex justify-between items-center text-lg font-semibold text-gray-900">
               Corrected Text
               <div className="flex gap-2">
                 <Button
@@ -144,9 +150,12 @@ export default function GrammarChecker() {
                   size="icon"
                   onClick={handleCopy}
                   disabled={!completion}
+                  aria-label={
+                    isCopied ? "Copied to clipboard" : "Copy to clipboard"
+                  }
                 >
                   {isCopied ? (
-                    <CheckCircle2 className="h-4 w-4" />
+                    <CheckCircle2 className="h-4 w-4 text-green-600" />
                   ) : (
                     <Copy className="h-4 w-4" />
                   )}
@@ -156,6 +165,7 @@ export default function GrammarChecker() {
                   size="icon"
                   onClick={handleClear}
                   disabled={!inputText && !completion}
+                  aria-label="Clear input and output"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -163,15 +173,18 @@ export default function GrammarChecker() {
             </CardTitle>
           </CardHeader>
           <CardContent
-            className={`flex flex-col transition-all duration-300 ease-in-out ${
+            className={`flex flex-col transition-all duration-300 ease-in-out bg-gray-50 ${
               isOutputExpanded ? "h-auto" : "h-40"
             }`}
           >
             <div
               ref={outputRef}
-              className={`flex-grow p-2 rounded-md overflow-auto text-sm text-gray-900 ${
+              className={`flex-grow p-2 rounded-md overflow-auto text-base text-gray-900 bg-gray-50 ${
                 isOutputExpanded ? "min-h-[10rem]" : ""
               }`}
+              tabIndex={0}
+              role="region"
+              aria-label="Corrected text output"
             >
               {completion || "Corrected text will appear here..."}
             </div>

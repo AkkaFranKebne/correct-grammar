@@ -51,14 +51,10 @@ export default function SignInPage() {
       )}
       <SignInForm onUserNotFound={handleUserNotFound} />
       <div className="mt-4">
-        <Button variant="outline" onClick={() => signIn("email")}>
+        {/*    <Button variant="outline" onClick={() => signIn("email")}>
           Sign In with Email Link
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={() => setShowAccessRequest(true)}
-          className="ml-2"
-        >
+        </Button> */}
+        <Button variant="secondary" onClick={() => setShowAccessRequest(true)}>
           Request Access
         </Button>
       </div>

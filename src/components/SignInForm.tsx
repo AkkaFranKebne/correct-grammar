@@ -43,29 +43,51 @@ export default function SignInForm({ onUserNotFound }: SignInFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email" className="text-base font-medium text-gray-900">
+          Email
+        </Label>
         <Input
           id="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          className="mt-1 text-base text-gray-900 bg-gray-50 focus:ring-2 focus:ring-blue-500"
+          aria-describedby="email-description"
         />
+        <span id="email-description" className="sr-only">
+          Please provide a valid email address using the format name@place.com
+        </span>
       </div>
       <div>
-        <Label htmlFor="password">Password</Label>
+        <Label
+          htmlFor="password"
+          className="text-base font-medium text-gray-900"
+        >
+          Password
+        </Label>
         <Input
           id="password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          className="mt-1 text-base text-gray-900 bg-gray-50 focus:ring-2 focus:ring-blue-500"
+          aria-describedby="password-description"
         />
+        <span id="password-description" className="sr-only">
+          Enter your password. The password must be at least 8 characters long.
+        </span>
       </div>
-      <Button type="submit">Sign In</Button>
+      <Button
+        type="submit"
+        className="w-full bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-base font-medium"
+      >
+        Sign In
+      </Button>
       {error && (
         <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription id="signin-error">{error}</AlertDescription>
         </Alert>
       )}
     </form>
