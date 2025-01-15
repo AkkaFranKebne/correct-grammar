@@ -31,6 +31,11 @@ export default function AdminPanel({ initialUsers }: { initialUsers: User[] }) {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
+  const showMessage = (msg: string) => {
+    setMessage(msg);
+    setTimeout(() => setMessage(""), 3000);
+  };
+
   const addUser = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -46,7 +51,7 @@ export default function AdminPanel({ initialUsers }: { initialUsers: User[] }) {
         const newUser = await response.json();
         setUsers([...users, newUser]);
         setNewUserEmail("");
-        setMessage("User added successfully");
+        showMessage("User added successfully");
       } else {
         const data = await response.json();
         setError(data.message || "Error adding user");
@@ -66,7 +71,7 @@ export default function AdminPanel({ initialUsers }: { initialUsers: User[] }) {
       });
       if (response.ok) {
         setUsers(users.filter((user) => user.id !== userId));
-        setMessage("User removed successfully");
+        showMessage("User removed successfully");
       } else {
         const data = await response.json();
         setError(data.message || "Error removing user");
