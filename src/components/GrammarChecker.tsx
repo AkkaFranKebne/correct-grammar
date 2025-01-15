@@ -11,8 +11,6 @@ import { AlertCircle, Copy, CheckCircle2, X } from "lucide-react";
 export default function GrammarChecker() {
   const [inputText, setInputText] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [isInputExpanded, setIsInputExpanded] = useState(false);
-  const [isOutputExpanded, setIsOutputExpanded] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const outputRef = useRef<HTMLDivElement>(null);
@@ -29,34 +27,39 @@ export default function GrammarChecker() {
 
   useEffect(() => {
     if (textareaRef.current) {
-      // Setting isInputExpanded based on the textarea's scroll height on inputText change
-      setIsInputExpanded(textareaRef.current.scrollHeight > 160);
+      // making Textarea focused on entering the page
+      textareaRef.current.focus();
     }
-  }, [inputText]);
+  }, []);
 
   useEffect(() => {
-    if (outputRef.current) {
-      // Setting isOutputExpanded based on the output div's scroll height on output text change
-      setIsOutputExpanded(outputRef.current.scrollHeight > 160);
+    // Adjusting the height of the Textarea and the output div based on the content
+    if (inputText || completion) {
+      adjustHeight();
     }
-  }, [completion]);
+  }, [inputText, completion]);
 
-  const handleCheck = () => {
-    if (!inputText.trim()) {
-      // If no text in input show error
-      setError("Please enter some text to check.");
-      return;
+  const adjustHeight = () => {
+    // choosing the bigger hight as the default height for both elements, but with minimum height of 150px
+    if (textareaRef.current && outputRef.current) {
+      const inputHeight = textareaRef.current.scrollHeight;
+      const outputHeight = outputRef.current.scrollHeight;
+      const maxHeight = Math.max(inputHeight, outputHeight, 150);
+      textareaRef.current.style.height = `${maxHeight}px`;
+      outputRef.current.style.height = `${maxHeight}px`;
     }
-    setError(null);
-    // send text to the API for grammar checking
-    complete(inputText);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     // Defining a function to handle keydown events on the textarea.
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      handleCheck();
+      // send text to the API for grammar checking
+      complete(inputText);
+      if (outputRef.current) {
+        // moving focus to the output div after pressing Enter
+        outputRef.current.focus();
+      }
     }
   };
 
@@ -74,11 +77,17 @@ export default function GrammarChecker() {
     // clear input text, completion, and reset the textarea height
     setInputText("");
     setCompletion("");
+    setError(null);
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
+      // making the hight back to the default 150px
+      textareaRef.current.style.height = "150px";
+      // making the input focused
+      textareaRef.current.focus();
     }
-    setIsInputExpanded(false);
-    setIsOutputExpanded(false);
+    if (outputRef.current) {
+      // making the hight back to the default 150px
+      outputRef.current.style.height = "150px";
+    }
   };
 
   return (
@@ -91,103 +100,89 @@ export default function GrammarChecker() {
         </Alert>
       )}
       <div className="grid gap-4 md:grid-cols-2">
-        <Card>
+        <Card className="flex flex-col">
           <CardHeader>
-            <CardTitle className="flex justify-between items-center text-lg font-semibold text-gray-900">
-              Input Text
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleClear}
-                disabled={!inputText && !completion}
-                aria-label="Clear input and output"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          <CardContent
-            className={`flex flex-col transition-all duration-300 ease-in-out bg-gray-50 ${
-              isInputExpanded ? "h-auto" : "h-40"
-            }`}
-          >
-            <Textarea
-              ref={textareaRef}
-              placeholder="Enter your text here..."
-              value={inputText}
-              onChange={(e) => {
-                setInputText(e.target.value);
-                e.target.style.height = "auto";
-                // Setting the textarea height based on its scroll height.
-                e.target.style.height = `${e.target.scrollHeight}px`;
-              }}
-              onKeyDown={handleKeyDown}
-              className={`flex-grow resize-none text-base text-gray-900 border-none shadow-none bg-gray-50 focus:ring-2 focus:ring-blue-500 ${
-                isInputExpanded ? "min-h-[10rem]" : ""
-              }`}
-              aria-label="Input text for grammar checking"
-              aria-describedby="input-description"
-            />
-            <span id="input-description" className="sr-only">
-              Enter the text you want to check for grammar and spelling
-            </span>
-            <Button
-              onClick={handleCheck}
-              disabled={isLoading}
-              className="mt-2 self-start bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              {isLoading ? "Checking..." : "Check Grammar"}
-            </Button>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex justify-between items-center text-lg font-semibold text-gray-900">
-              Corrected Text
-              <div className="flex gap-2">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleCopy}
-                  disabled={!completion}
-                  aria-label={
-                    isCopied ? "Copied to clipboard" : "Copy to clipboard"
-                  }
-                >
-                  {isCopied ? (
-                    <CheckCircle2 className="h-4 w-4 text-green-600" />
-                  ) : (
-                    <Copy className="h-4 w-4" />
-                  )}
-                </Button>
+            <CardTitle className="flex justify-between items-center text-lg font-semibold text-gray-900 h-8">
+              <span>Input Text</span>
+              {inputText && (
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={handleClear}
-                  disabled={!inputText && !completion}
-                  aria-label="Clear input and output"
+                  aria-label="Clear input"
                 >
                   <X className="h-4 w-4" />
                 </Button>
-              </div>
+              )}
             </CardTitle>
           </CardHeader>
-          <CardContent
-            className={`flex flex-col transition-all duration-300 ease-in-out bg-gray-50 ${
-              isOutputExpanded ? "h-auto" : "h-40"
-            }`}
-          >
+          <CardContent className="flex-grow">
+            <Textarea
+              ref={textareaRef}
+              placeholder="Enter your text here and press Enter to check grammar..."
+              value={inputText}
+              onChange={(e) => {
+                setInputText(e.target.value);
+                // making the Textarea height adjust to the content
+                adjustHeight();
+              }}
+              onKeyDown={handleKeyDown}
+              className="w-full h-[150px] min-h-[150px] resize-none !text-base text-gray-900 border-none bg-gray-50 focus:ring-2 focus:ring-blue-500 !font-sans"
+              aria-label="Input text for grammar checking"
+              aria-describedby="input-description"
+            />
+            <span id="input-description" className="sr-only">
+              Enter the text you want to check for grammar and spelling, then
+              press Enter to check
+            </span>
+          </CardContent>
+        </Card>
+        <Card className="flex flex-col">
+          <CardHeader>
+            <CardTitle className="flex justify-between items-center text-lg font-semibold text-gray-900 h-8">
+              <span>Corrected Text</span>
+              {completion && (
+                <div className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleCopy}
+                    aria-label={
+                      isCopied ? "Copied to clipboard" : "Copy to clipboard"
+                    }
+                  >
+                    {isCopied ? (
+                      <CheckCircle2 className="h-4 w-4 text-green-600" />
+                    ) : (
+                      <Copy className="h-4 w-4" />
+                    )}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleClear}
+                    aria-label="Clear input and output"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex-grow">
             <div
               ref={outputRef}
-              className={`flex-grow p-2 rounded-md overflow-auto text-base text-gray-900 bg-gray-50 ${
-                isOutputExpanded ? "min-h-[10rem]" : ""
-              }`}
+              className="w-full h-[150px] min-h-[150px] p-2 rounded-md overflow-auto text-base text-gray-900 bg-gray-50 font-sans"
               tabIndex={0}
               role="region"
               aria-label="Corrected text output"
+              aria-describedby="output-description"
             >
-              {completion || "Corrected text will appear here..."}
+              {completion ? completion : "Corrected text will appear here..."}
             </div>
+            <span id="output-description" className="sr-only">
+              This area displays the corrected version of your input text
+            </span>
           </CardContent>
         </Card>
       </div>
