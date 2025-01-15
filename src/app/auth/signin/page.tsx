@@ -26,6 +26,7 @@ export default function SignInPage() {
         <h1 className="text-2xl font-bold mb-4">Request Access</h1>
         <AccessRequestForm />
         <Button
+          variant="secondary"
           onClick={() => {
             setShowAccessRequest(false);
             setIsUserNotFound(false);
