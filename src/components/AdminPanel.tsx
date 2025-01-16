@@ -98,7 +98,7 @@ export default function AdminPanel({ initialUsers }: { initialUsers: User[] }) {
             value={newUserEmail}
             onChange={(e) => setNewUserEmail(e.target.value)}
             required
-            className="flex-grow text-base text-gray-900 bg-gray-50 focus:ring-2 focus:ring-blue-500"
+            className="flex-grow text-base text-gray-900 bg-white border-gray-300 focus:ring-2 focus:ring-blue-500"
             aria-describedby="add-user-description"
           />
           <span id="add-user-description" className="sr-only">
@@ -107,7 +107,7 @@ export default function AdminPanel({ initialUsers }: { initialUsers: User[] }) {
 
           <Button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-base font-medium"
+            className="bg-blue-600 hover:bg-blue-700 text-white focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-base font-medium"
           >
             Add
           </Button>
@@ -123,19 +123,21 @@ export default function AdminPanel({ initialUsers }: { initialUsers: User[] }) {
           <AlertDescription id="admin-error">{error}</AlertDescription>
         </Alert>
       )}
-      <ul className="space-y-2">
+      <ul
+        className="space-y-2"
+        aria-description="List of the users with removal buttons"
+      >
         {users.map((user) => (
           <li
             key={user.id}
-            className="flex justify-between items-center p-2 bg-gray-50 rounded"
+            className="flex justify-between items-center p-2 bg-gray-100 rounded"
           >
             <span className="text-base text-gray-900">
               {user.email} ({user.role})
             </span>
             <Button
               onClick={() => removeUser(user.id)}
-              variant="destructive"
-              className="focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-base font-medium"
+              className="bg-red-600 hover:bg-red-700 text-white focus:ring-2 focus:ring-red-500 focus:ring-offset-2 text-base font-medium"
             >
               Remove
             </Button>

@@ -15,6 +15,12 @@ export default function GrammarChecker() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const outputRef = useRef<HTMLDivElement>(null);
 
+  /*
+  `aria-live="polite"` tells screen readers that the content of this element may change and should be announced when it does.
+  `aria-atomic="true"` ensures that the entire content of the div is read out when it changes, not just the parts that have been updated.
+  `aria-relevant="additions text"` specifies that both added content and text changes should be announced.
+*/
+
   // complete - function to send the text to the API for grammar checking; completion - the corrected text returned by the API; isLoading - loading state of the API request; setCompletion - function to set the corrected text
   const { complete, completion, isLoading, setCompletion } = useCompletion({
     // Setting the API endpoint for grammar checking.
@@ -59,6 +65,15 @@ export default function GrammarChecker() {
       if (outputRef.current) {
         // moving focus to the output div after pressing Enter
         outputRef.current.focus();
+        // Add a slight delay to ensure the new content is read - ensures that the new content is available when the label is updated, prompting screen readers to announce the change
+        setTimeout(() => {
+          if (outputRef.current) {
+            outputRef.current.setAttribute(
+              "aria-label",
+              "Corrected text output: " + (completion || "")
+            );
+          }
+        }, 100);
       }
     }
   };
@@ -103,7 +118,7 @@ export default function GrammarChecker() {
         <Card className="flex flex-col">
           <CardHeader>
             <CardTitle className="flex justify-between items-center text-lg font-semibold text-gray-900 h-8">
-              <span>Input Text</span>
+              <h1>Input Text</h1>
               {inputText && (
                 <Button
                   variant="ghost"
@@ -140,7 +155,7 @@ export default function GrammarChecker() {
         <Card className="flex flex-col">
           <CardHeader>
             <CardTitle className="flex justify-between items-center text-lg font-semibold text-gray-900 h-8">
-              <span>Corrected Text</span>
+              <h1>Corrected Text</h1>
               {completion && (
                 <div className="flex gap-2">
                   <Button
@@ -175,6 +190,9 @@ export default function GrammarChecker() {
               className="w-full h-[150px] min-h-[150px] p-2 rounded-md overflow-auto text-base text-gray-900 bg-gray-50 font-sans"
               tabIndex={0}
               role="region"
+              aria-live="polite"
+              aria-atomic="true"
+              aria-relevant="additions text"
               aria-label="Corrected text output"
               aria-describedby="output-description"
             >
