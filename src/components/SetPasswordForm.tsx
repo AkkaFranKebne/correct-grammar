@@ -7,18 +7,20 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface SetPasswordFormProps {
-  userId: string;
+  token: string;
+  onPasswordSet: () => void;
 }
 
-export default function SetPasswordForm({ userId }: SetPasswordFormProps) {
+export default function SetPasswordForm({
+  token,
+  onPasswordSet,
+}: SetPasswordFormProps) {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage("");
     setError("");
 
     // Check if the password and confirmPassword values match
@@ -32,20 +34,17 @@ export default function SetPasswordForm({ userId }: SetPasswordFormProps) {
       const response = await fetch("/api/set-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, password }),
+        body: JSON.stringify({ password, token }),
       });
 
       if (response.ok) {
-        setMessage("Password set successfully");
-        setPassword("");
-        setConfirmPassword("");
+        onPasswordSet();
       } else {
         const data = await response.json();
         setError(data.message || "Error setting password");
       }
-      // @ts-expect-error temporary fix
-    } catch (error: string) {
-      setError(error);
+    } catch (error) {
+      setError("Error setting password");
     }
   };
 
@@ -72,7 +71,6 @@ export default function SetPasswordForm({ userId }: SetPasswordFormProps) {
       <span id="password-description" className="sr-only">
         Enter a new password (minimum 8 characters)
       </span>
-
       <div>
         <Label
           htmlFor="confirmPassword"
@@ -100,14 +98,9 @@ export default function SetPasswordForm({ userId }: SetPasswordFormProps) {
       >
         Set Password
       </Button>
-      {message && (
-        <Alert>
-          <AlertDescription id="password-success">{message}</AlertDescription>
-        </Alert>
-      )}
       {error && (
         <Alert variant="destructive">
-          <AlertDescription id="password-error">{error}</AlertDescription>
+          <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
     </form>

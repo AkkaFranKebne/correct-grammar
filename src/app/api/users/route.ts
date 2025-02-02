@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma"; // Prisma client instance from the lib/prisma
 import { getServerSession } from "next-auth/next"; // to handle session management
 import { authOptions } from "../auth/[...nextauth]/authOptions";
 import { sendEmail } from "@/lib/email";
+import crypto from "crypto";
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   // Retrieve the current session using the provided authentication options
@@ -18,16 +19,32 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     // Parse the request body to extract the email field
     const { email } = await req.json();
 
-    // Create a new user in the database with the provided email and approved access status
+    // Generate a random reset token and set the expiry date to 24 hours from now
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours from now
+
     const user = await prisma.user.create({
-      data: { email, accessStatus: "APPROVED" },
+      data: {
+        email,
+        accessStatus: "APPROVED",
+        //@ts-expect-error  temporary fix
+        resetToken,
+        resetTokenExpiry,
+      },
     });
+
+    // construct the URL for the set-password page with the reset token
+    const setPasswordUrl = `${process.env.NEXTAUTH_URL}/set-password?token=${resetToken}`;
 
     await sendEmail({
       to: email,
-      subject: "Access Granted for Correct Grammar App",
-      text: "You have been granted access to the Correct Grammar app.",
-      html: "<p>You have been granted access to the Correct Grammar app.</p>",
+      subject: "Access Granted for Correct Grammar App - Set Your Password",
+      text: `You have been granted access to the Correct Grammar App app. Please set your password by visiting: ${setPasswordUrl}`,
+      html: `
+        <p>You have been granted access to the Correct Grammar App app.</p>
+        <p>Please set your password by clicking the link below:</p>
+        <a href="${setPasswordUrl}">Set Your Password</a>
+      `,
     });
 
     return NextResponse.json(user);
