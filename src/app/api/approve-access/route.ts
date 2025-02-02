@@ -25,7 +25,6 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       where: { id: userId },
       data: {
         accessStatus: "APPROVED",
-        //@ts-expect-error  temporary fix
         resetToken,
         resetTokenExpiry,
       },

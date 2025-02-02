@@ -16,7 +16,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     // Search the database for a user with the provided reset token and a reset token expiry date greater than the current date.
     const user = await prisma.user.findFirst({
       where: {
-        //@ts-expect-error  temporary fix
         resetToken: token,
         resetTokenExpiry: { gt: new Date() },
       },
@@ -36,7 +35,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       where: { id: user.id },
       data: {
         password: hashedPassword,
-        //@ts-expect-error  temporary fix
         resetToken: null,
         resetTokenExpiry: null,
       },

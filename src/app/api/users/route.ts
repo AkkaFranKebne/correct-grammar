@@ -27,7 +27,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       data: {
         email,
         accessStatus: "APPROVED",
-        //@ts-expect-error  temporary fix
         resetToken,
         resetTokenExpiry,
       },
