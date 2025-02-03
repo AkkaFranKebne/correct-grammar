@@ -56,25 +56,29 @@ export default function GrammarChecker() {
     }
   };
 
+  const handleCheck = () => {
+    // send text to the API for grammar checking
+    complete(inputText);
+    if (outputRef.current) {
+      // moving focus to the output div after pressing Enter
+      outputRef.current.focus();
+      // Add a slight delay to ensure the new content is read - ensures that the new content is available when the label is updated, prompting screen readers to announce the change
+      setTimeout(() => {
+        if (outputRef.current) {
+          outputRef.current.setAttribute(
+            "aria-label",
+            "Corrected text output: " + (completion || "")
+          );
+        }
+      }, 100);
+    }
+  };
+
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     // Defining a function to handle keydown events on the textarea.
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      // send text to the API for grammar checking
-      complete(inputText);
-      if (outputRef.current) {
-        // moving focus to the output div after pressing Enter
-        outputRef.current.focus();
-        // Add a slight delay to ensure the new content is read - ensures that the new content is available when the label is updated, prompting screen readers to announce the change
-        setTimeout(() => {
-          if (outputRef.current) {
-            outputRef.current.setAttribute(
-              "aria-label",
-              "Corrected text output: " + (completion || "")
-            );
-          }
-        }, 100);
-      }
+      handleCheck();
     }
   };
 
@@ -150,6 +154,13 @@ export default function GrammarChecker() {
               Enter the text you want to check for grammar and spelling, then
               press Enter to check
             </span>
+            <Button
+              onClick={handleCheck}
+              disabled={isLoading}
+              className="mt-2 w-full md:hidden bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              {isLoading ? "Checking..." : "Check Grammar"}
+            </Button>
           </CardContent>
         </Card>
         <Card className="flex flex-col">
