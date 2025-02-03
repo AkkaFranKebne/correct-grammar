@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { sendEmail } from "@/lib/email"; // to send emails.
 import crypto from "crypto"; // to generate random tokens.
@@ -45,7 +45,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       `,
     });
 
-    return NextResponse.json({ message: "Access approved successfully" });
+    // Redirect to the access-approved page
+    return NextResponse.redirect(new URL("/access-approved", req.url));
   } catch (error) {
     console.error("Error approving access:", error);
     return NextResponse.json(
