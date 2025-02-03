@@ -38,10 +38,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     await sendEmail({
       to: email,
       subject: "Access Granted for Correct Grammar App - Set Your Password",
-      text: `You have been granted access to the Correct Grammar App app. Please set your password by visiting: ${setPasswordUrl}`,
+      text: `You have been granted access to the Correct Grammar App app. Please set your password by visiting in the next 24h: ${setPasswordUrl}`,
       html: `
         <p>You have been granted access to the Correct Grammar App app.</p>
-        <p>Please set your password by clicking the link below:</p>
+        <p>Please set your password by clicking the link below in the next 24h:</p>
         <a href="${setPasswordUrl}">Set Your Password</a>
       `,
     });

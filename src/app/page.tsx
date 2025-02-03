@@ -2,7 +2,9 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { authOptions } from "./api/auth/[...nextauth]/authOptions";
 import GrammarChecker from "@/components/GrammarChecker";
-import SetPasswordForm from "@/components/SetPasswordForm";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import prisma from "@/lib/prisma";
 
 /*
@@ -50,13 +52,18 @@ export default async function Home() {
     return (
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Set Your Password</h1>
-        <p className="mb-4">
-          Please set a password to access the Grammar Checker.
-        </p>
-        <SetPasswordForm
-          //@ts-expect-error  temporary fix
-          userId={session.user.id}
-        />
+        <Alert>
+          <AlertDescription>
+            You need to set your password using the link sent to your email. If
+            you haven't received the email or the link has expired, please
+            request access again.
+          </AlertDescription>
+        </Alert>
+        <div className="mt-4">
+          <Button asChild>
+            <Link href="/auth/signin">Request Access</Link>
+          </Button>
+        </div>
       </div>
     );
   }
