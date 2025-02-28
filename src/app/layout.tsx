@@ -1,5 +1,6 @@
 import type { Metadata } from "next"; // used to define the metadata for the Next.js application.
 import { Geist, Geist_Mono } from "next/font/google"; // used to load Google Fonts
+import StoryblokProvider from "@/components/storyblok/StoryblokProvider";
 import "./globals.css";
 
 /*
@@ -70,11 +71,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <StoryblokProvider>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          {children}
+        </body>
+      </StoryblokProvider>
     </html>
   );
 }
