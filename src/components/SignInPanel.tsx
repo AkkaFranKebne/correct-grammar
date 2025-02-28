@@ -14,7 +14,7 @@ interface SignInPanelProps {
 const SignInPanel: React.FC<SignInPanelProps> = ({ title }) => {
   const [showAccessRequest, setShowAccessRequest] = useState(false);
   const [isUserNotFound, setIsUserNotFound] = useState(false);
-  console.log("SignInPanelProps", title);
+
   // if the user is not found, show alert and then the access request form after 3 seconds
   const handleUserNotFound = () => {
     setIsUserNotFound(true);

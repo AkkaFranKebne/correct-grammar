@@ -4,7 +4,7 @@ import { getStoryblokApi } from "@/lib/storyblok";
 
 export default async function Test() {
   const { data } = await fetchData();
-  console.log(data);
+
   return (
     <div>
       <StoryblokStory story={data.story} />

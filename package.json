@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "prisma:generate": "prisma generate",
-    "postinstall": "npm run prisma:generate"
+    "postinstall": "npm run prisma:generate",
+    "pull-sb-components": "storyblok pull-components --space 328152",
+    "generate-sb-types": "storyblok generate-typescript-typedefs --sourceFilePaths ./components.328152.json --destinationFilePath ./component-types-sb.d.ts"
   },
   "prisma": {
     "schema": "./prisma/schema.prisma",
