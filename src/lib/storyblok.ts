@@ -5,6 +5,7 @@ import Grid from "@/components/storyblok/Grid";
 import Teaser from "@/components/storyblok/Teaser";
 import HeroSection from "@/components/storyblok/HeroSection";
 import StoryblokButton from "@/components/storyblok/StoryblokButton";
+import PostPage from "@/components/storyblok/PostPage";
 
 export const getStoryblokApi = () => {
   return storyblokInit({
@@ -17,6 +18,7 @@ export const getStoryblokApi = () => {
       page: Page,
       "hero-section": HeroSection,
       button: StoryblokButton,
+      "post page": PostPage,
     },
   });
 };
