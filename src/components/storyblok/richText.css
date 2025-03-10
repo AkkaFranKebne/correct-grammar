@@ -1,0 +1,60 @@
+/* Additional Rich Text styling that's hard to achieve with Tailwind modifiers */
+
+/* Style for code blocks that might be rendered by Storyblok */
+.prose pre {
+  background-color: hsl(var(--muted));
+  border-radius: 0.375rem;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.prose code {
+  background-color: hsl(var(--muted));
+  border-radius: 0.25rem;
+  padding: 0.2em 0.4em;
+  font-size: 0.875em;
+}
+
+/* Style for tables */
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
+
+.prose table th {
+  background-color: hsl(var(--muted));
+  font-weight: 600;
+  text-align: left;
+  padding: 0.75em;
+  border: 1px solid hsl(var(--border));
+}
+
+.prose table td {
+  padding: 0.75em;
+  border: 1px solid hsl(var(--border));
+}
+
+.prose table tr:nth-child(even) {
+  background-color: hsl(var(--muted) / 0.3);
+}
+
+/* Dark mode adjustments */
+.dark .prose pre,
+.dark .prose code {
+  background-color: hsl(var(--muted));
+}
+
+.dark .prose table th {
+  background-color: hsl(var(--muted));
+}
+
+.dark .prose table td {
+  border-color: hsl(var(--border));
+}
+
+.dark .prose table tr:nth-child(even) {
+  background-color: hsl(var(--muted) / 0.3);
+}
+
