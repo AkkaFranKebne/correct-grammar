@@ -1,0 +1,32 @@
+/* Two-column layout for rich text content */
+.rich-text-columns .prose {
+  column-count: 1;
+  column-gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .rich-text-columns .prose {
+    column-count: 2;
+    column-gap: 3rem;
+  }
+}
+
+/* Prevent headings from breaking across columns */
+.rich-text-columns .prose h1,
+.rich-text-columns .prose h2,
+.rich-text-columns .prose h3,
+.rich-text-columns .prose h4,
+.rich-text-columns .prose h5,
+.rich-text-columns .prose h6 {
+  column-span: all;
+}
+
+/* Prevent images from breaking across columns */
+.rich-text-columns .prose img,
+.rich-text-columns .prose figure {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%;
+  break-inside: avoid;
+}
