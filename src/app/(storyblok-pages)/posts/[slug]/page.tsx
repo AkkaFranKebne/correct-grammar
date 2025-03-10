@@ -5,11 +5,7 @@ import { getStoryblokApi } from "@/lib/storyblok";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-interface PostPageProps {
-  params: {
-    slug: string;
-  };
-}
+type PostPageProps = Promise<{ slug: string }>;
 
 // Function to fetch a single post from Storyblok
 async function fetchPost(slug: string) {
@@ -29,8 +25,10 @@ async function fetchPost(slug: string) {
 // Generate metadata for the page dynamically
 export async function generateMetadata({
   params,
-}: PostPageProps): Promise<Metadata> {
-  const { slug } = params;
+}: {
+  params: PostPageProps;
+}): Promise<Metadata> {
+  const { slug }: { slug: string } = await params;
   const response = await fetchPost(slug);
 
   if (!response || !response.data || !response.data.story) {
@@ -90,8 +88,8 @@ export async function generateStaticParams() {
   }
 }
 
-export default async function Post({ params }: PostPageProps) {
-  const { slug } = params;
+export default async function Post({ params }: { params: PostPageProps }) {
+  const { slug }: { slug: string } = await params;
   const response = await fetchPost(slug);
 
   if (!response || !response.data || !response.data.story) {
