@@ -1,19 +1,9 @@
 import React from "react";
 import { storyblokEditable, renderRichText } from "@storyblok/react";
+import type { RichtextStoryblok } from "../../../component-types-sb";
 import "./richText.css";
 
-interface RichTextProps {
-  blok: {
-    _uid: string;
-    text: {
-      type: string;
-      content: any[];
-    };
-    component: string;
-  };
-}
-
-const RichText: React.FC<RichTextProps> = ({ blok }) => {
+const RichText: React.FC<RichtextStoryblok> = ({ blok }) => {
   // Convert the rich text object to HTML
   const renderedRichText = renderRichText(blok.text);
 

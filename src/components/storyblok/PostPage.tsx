@@ -1,14 +1,11 @@
 import type React from "react";
 import { storyblokEditable } from "@storyblok/react/rsc";
+import type { PostPageStoryblok } from "../../../component-types-sb";
 import Image from "next/image";
 import RichText from "./RichText";
 import "./postPage.css";
 
-interface PostPageProps {
-  blok: any;
-}
-
-const PostPage: React.FC<PostPageProps> = ({ blok }) => {
+const PostPage: React.FC<PostPageStoryblok> = ({ blok }) => {
   return (
     <main
       className="container mx-auto px-4 py-8 max-w-7xl"
@@ -37,7 +34,7 @@ const PostPage: React.FC<PostPageProps> = ({ blok }) => {
 
       {/* Rich text content with CSS columns */}
       <section className="rich-text-columns">
-        <RichText blok={blok} />
+        <RichText blok={blok} type="doc" />
       </section>
     </main>
   );

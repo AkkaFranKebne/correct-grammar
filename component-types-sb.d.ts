@@ -103,6 +103,7 @@ export interface GridStoryblok {
     | GridStoryblok
     | HeroSectionStoryblok
     | PageStoryblok
+    | PostPageStoryblok
     | TeaserStoryblok
   )[];
   component: "grid";
@@ -153,9 +154,28 @@ export interface PageStoryblok {
     | GridStoryblok
     | HeroSectionStoryblok
     | PageStoryblok
+    | PostPageStoryblok
     | TeaserStoryblok
   )[];
   component: "page";
+  _uid: string;
+  [k: string]: any;
+}
+
+export interface RichtextStoryblok {
+  type: string;
+  content?: RichtextStoryblok[];
+  marks?: RichtextStoryblok[];
+  attrs?: any;
+  text?: string;
+  [k: string]: any;
+}
+
+export interface PostPageStoryblok {
+  image?: AssetStoryblok;
+  title?: string;
+  text?: RichtextStoryblok;
+  component: "post page";
   _uid: string;
   [k: string]: any;
 }

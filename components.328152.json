@@ -215,6 +215,50 @@
       "content_type_asset_preview": null
     },
     {
+      "name": "post page",
+      "display_name": null,
+      "description": "",
+      "created_at": "2025-03-07T13:27:58.244Z",
+      "updated_at": "2025-03-07T13:29:13.598Z",
+      "id": 7057503,
+      "schema": {
+        "image": {
+          "type": "asset",
+          "pos": 0,
+          "allow_external_url": true,
+          "filetypes": [
+            "images"
+          ],
+          "id": "pS08aXsMS-yAEraJfvfAUQ"
+        },
+        "title": {
+          "type": "text",
+          "pos": 1,
+          "id": "RXQNNfKCS_yXfHVFGXBhyQ"
+        },
+        "text": {
+          "type": "richtext",
+          "pos": 2,
+          "id": "e3kiZBudSvCYDQs9thwzkQ"
+        }
+      },
+      "image": null,
+      "preview_field": null,
+      "is_root": true,
+      "preview_tmpl": null,
+      "is_nestable": false,
+      "all_presets": [],
+      "preset_id": null,
+      "real_name": "post page",
+      "component_group_uuid": "all",
+      "color": null,
+      "icon": null,
+      "internal_tags_list": [],
+      "internal_tag_ids": [],
+      "content_type_asset_preview": null,
+      "component_group_name": ""
+    },
+    {
       "name": "teaser",
       "display_name": null,
       "description": null,
