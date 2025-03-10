@@ -2,6 +2,18 @@ import type { StoryblokClient, ISbStoriesParams } from "@storyblok/react";
 import Link from "next/link";
 import Image from "next/image";
 import { getStoryblokApi } from "@/lib/storyblok";
+import type { Metadata } from "next";
+import { PostPageStoryblok } from "../../../../component-types-sb";
+
+interface StoryblokStory {
+  uuid: string;
+  name: string;
+  slug: string;
+  full_slug: string;
+  created_at: string;
+  published_at: string | null;
+  content: PostPageStoryblok;
+}
 
 // Function to fetch all posts from Storyblok
 async function fetchPosts() {
@@ -14,6 +26,30 @@ async function fetchPosts() {
 
   const storyblokApi: StoryblokClient = getStoryblokApi()();
   return storyblokApi.get(`cdn/stories`, sbParams);
+}
+
+// Generate metadata for the page
+export const metadata: Metadata = {
+  title: "Blog Posts",
+  description: "Explore our collection",
+};
+
+// Generate static params for all post pages
+export async function generateStaticParams() {
+  try {
+    const response = await fetchPosts();
+
+    if (!response || !response.data || !response.data.stories) {
+      return [];
+    }
+
+    return response.data.stories.map((story: StoryblokStory) => ({
+      slug: story.slug,
+    }));
+  } catch (error) {
+    console.error("Error generating static params:", error);
+    return [];
+  }
 }
 
 export default async function Posts() {
@@ -30,7 +66,7 @@ export default async function Posts() {
       <h1 className="text-3xl font-bold mb-8">Blog Posts</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {stories.map((story: any) => (
+        {stories.map((story: StoryblokStory) => (
           <Link
             href={`/posts/${story.slug}`}
             key={story.uuid}
@@ -42,7 +78,11 @@ export default async function Posts() {
                 {story.content.image?.filename ? (
                   <Image
                     src={story.content.image.filename}
-                    alt={story.content.image.alt || story.content.title}
+                    alt={
+                      story.content.image.alt ||
+                      story.content.title ||
+                      "featured image"
+                    }
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
