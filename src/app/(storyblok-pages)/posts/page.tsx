@@ -15,7 +15,6 @@ export default async function Posts() {
   if (!data) {
     return <div className="error-msg">Ups</div>;
   }
-  console.log("data", data);
   return (
     <div>
       <StoryblokStory story={data.story} />

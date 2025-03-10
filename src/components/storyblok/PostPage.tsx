@@ -3,6 +3,7 @@ import {
   StoryblokServerComponent,
 } from "@storyblok/react/rsc";
 import Image from "next/image";
+import RichText from "./RichText";
 
 interface PostPageProps {
   blok: any;
@@ -22,7 +23,7 @@ const PostPage: React.FC<PostPageProps> = ({ blok }) => {
           blurDataURL={blok.image.filename} // to do how to get smaller version from storyblok
         />
       </section>
-      <section>for content</section>
+      <RichText blok={blok} />
     </main>
   );
 };
