@@ -41,7 +41,7 @@ export default function GrammarChecker() {
     api: "/api/check-grammar",
     onError: (error) => {
       console.error("Error:", error);
-      setError("An error occurred while checking the text. Please try again.");
+      setError(JSON.parse(error.message).error);
     },
   });
 
@@ -58,6 +58,18 @@ export default function GrammarChecker() {
       adjustHeight();
     }
   }, [inputText, completion]);
+
+  // Automatically dismiss the error after 5 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null);
+      }, 5000);
+
+      // Clean up the timer if the component unmounts or if error changes
+      return () => clearTimeout(timer);
+    }
+  }, [error]); // Re-run this effect when the error changes
 
   const adjustHeight = () => {
     // choosing the bigger hight as the default height for both elements, but with minimum height of 150px
@@ -169,7 +181,19 @@ export default function GrammarChecker() {
       opacity: 0,
       y: -20,
       scale: 0.95,
-      transition: { duration: 0.2 }, // Quick fade out
+      transition: { duration: 0.3 },
+    },
+  };
+
+  // A progress indicator animation variant
+  const progressVariants = {
+    start: { width: "100%" },
+    end: {
+      width: "0%",
+      transition: {
+        duration: 5, // 5 seconds to match the timeout
+        ease: "linear", // Constant speed reduction
+      },
     },
   };
 
@@ -206,18 +230,26 @@ export default function GrammarChecker() {
       {/* AnimatePresence enables exit animations when components are removed */}
       <AnimatePresence>
         {error && (
-          // Error alert with entrance and exit animations
+          // Error alert with entrance, exit animations, and auto-dismiss after 5 seconds
           <motion.div
             variants={alertVariants}
             initial="hidden"
             animate="visible"
             exit="exit" // This animation plays when the error is cleared
+            className="relative overflow-hidden" // Added to contain the progress bar
           >
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Error</AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Alert>
+            {/* Progress indicator that animates from full width to zero over 5 seconds */}
+            <motion.div
+              className="absolute bottom-0 left-0 h-2 bg-white bg-opacity-50"
+              variants={progressVariants}
+              initial="start"
+              animate="end"
+            />
           </motion.div>
         )}
       </AnimatePresence>
