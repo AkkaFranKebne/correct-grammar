@@ -1,10 +1,23 @@
 version: 2
 updates:
   - package-ecosystem: "npm"
-    directory: "/" # Root directory of package.json
+    directory: "/" 
     schedule:
-      interval: "daily" # daily, weekly, or monthly
-    open-pull-requests-limit: 5
+      interval: "weekly"
+      day: "wednesday"
+    open-pull-requests-limit: 10 
     rebase-strategy: "auto"
     allow:
       - dependency-type: "direct"
+    groups:
+      minor-and-patch-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      major-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "major"
