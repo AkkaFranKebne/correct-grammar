@@ -24,7 +24,7 @@ export default function AccessApprovedPage() {
             Access Approved
           </CardTitle>
           <CardDescription className="text-center">
-            The user's access has been successfully approved.
+            {"The user's access has been successfully approved."}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center">

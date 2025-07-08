@@ -44,7 +44,7 @@ export default function SetPasswordForm({
         setError(data.message || "Error setting password");
       }
     } catch (error) {
-      setError("Error setting password");
+      setError(`Error setting password: ${error}`);
     }
   };
 
