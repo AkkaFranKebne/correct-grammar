@@ -54,9 +54,11 @@ export default async function Home() {
         <h1 className="text-2xl font-bold mb-4">Set Your Password</h1>
         <Alert>
           <AlertDescription>
-            You need to set your password using the link sent to your email. If
-            you haven't received the email or the link has expired, please
-            request access again.
+            {
+              "You need to set your password using the link sent to your email. If"
+            }
+            {"you haven't received the email or the link has expired, please"}
+            {"request access again."}
           </AlertDescription>
         </Alert>
         <div className="mt-4">

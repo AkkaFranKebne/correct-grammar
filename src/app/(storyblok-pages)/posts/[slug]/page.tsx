@@ -78,7 +78,7 @@ export async function generateStaticParams() {
     if (!response || !response.data || !response.data.stories) {
       return [];
     }
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return response.data.stories.map((story: any) => ({
       slug: story.slug,
     }));

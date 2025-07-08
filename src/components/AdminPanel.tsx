@@ -57,7 +57,7 @@ export default function AdminPanel({ initialUsers }: { initialUsers: User[] }) {
         setError(data.message || "Error adding user");
       }
     } catch (err) {
-      setError("Error adding user");
+      setError(`Error adding user: ${err}`);
     }
   };
 
@@ -77,7 +77,7 @@ export default function AdminPanel({ initialUsers }: { initialUsers: User[] }) {
         setError(data.message || "Error removing user");
       }
     } catch (err) {
-      setError("Error removing user");
+      setError(`Error removing user: ${err}`);
     }
   };
 
