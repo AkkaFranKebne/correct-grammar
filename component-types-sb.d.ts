@@ -21,7 +21,7 @@ export type MultilinkStoryblok =
         id: number;
         uuid: string;
         content?: {
-          [k: string]: unknown;
+          [k: string]: any;
         };
         slug: string;
         full_slug: string;
@@ -31,19 +31,19 @@ export type MultilinkStoryblok =
         is_startpage?: boolean;
         parent_id?: null | number;
         meta_data?: null | {
-          [k: string]: unknown;
+          [k: string]: any;
         };
         group_id?: string;
         first_published_at?: string;
         release_id?: null | number;
         lang?: string;
         path?: null | string;
-        alternates?: unknown[];
+        alternates?: any[];
         default_full_slug?: null | string;
         translated_slugs?: null | unknown[];
-        [k: string]: unknown;
+        [k: string]: any;
       };
-      [k: string]: unknown;
+      [k: string]: any;
     }
   | {
       fieldtype: "multilink";
@@ -54,7 +54,7 @@ export type MultilinkStoryblok =
       linktype: "url";
       rel?: string;
       title?: string;
-      [k: string]: unknown;
+      [k: string]: any;
     }
   | {
       fieldtype: "multilink";
@@ -64,7 +64,7 @@ export type MultilinkStoryblok =
       target?: "_blank" | "_self";
       email?: string;
       linktype: "email";
-      [k: string]: unknown;
+      [k: string]: any;
     }
   | {
       fieldtype: "multilink";
@@ -73,7 +73,7 @@ export type MultilinkStoryblok =
       cached_url: string;
       target?: "_blank" | "_self";
       linktype: "asset";
-      [k: string]: unknown;
+      [k: string]: any;
     };
 
 export interface ButtonStoryblok {
@@ -86,14 +86,14 @@ export interface ButtonStoryblok {
   size?: number | string;
   component: "button";
   _uid: string;
-  [k: string]: unknown;
+  [k: string]: any;
 }
 
 export interface FeatureStoryblok {
   name?: string;
   component: "feature";
   _uid: string;
-  [k: string]: unknown;
+  [k: string]: any;
 }
 
 export interface GridStoryblok {
@@ -108,7 +108,7 @@ export interface GridStoryblok {
   )[];
   component: "grid";
   _uid: string;
-  [k: string]: unknown;
+  [k: string]: any;
 }
 
 export interface AssetStoryblok {
@@ -121,7 +121,7 @@ export interface AssetStoryblok {
   title: string | null;
   focus: string | null;
   meta_data?: {
-    [k: string]: unknown;
+    [k: string]: any;
   };
   source?: string | null;
   is_external_url?: boolean;
@@ -133,7 +133,7 @@ export interface AssetStoryblok {
   aspect_ratio?: number | null;
   public_id?: string | null;
   content_type?: string;
-  [k: string]: unknown;
+  [k: string]: any;
 }
 
 export interface HeroSectionStoryblok {
@@ -144,7 +144,7 @@ export interface HeroSectionStoryblok {
   fullWidth?: number | string;
   component: "hero-section";
   _uid: string;
-  [k: string]: unknown;
+  [k: string]: any;
 }
 
 export interface PageStoryblok {
@@ -159,16 +159,16 @@ export interface PageStoryblok {
   )[];
   component: "page";
   _uid: string;
-  [k: string]: unknown;
+  [k: string]: any;
 }
 
 export interface RichtextStoryblok {
   type: string;
   content?: RichtextStoryblok[];
   marks?: RichtextStoryblok[];
-  attrs?: unknown;
+  attrs?: any;
   text?: string;
-  [k: string]: unknown;
+  [k: string]: any;
 }
 
 export interface PostPageStoryblok {
@@ -177,12 +177,12 @@ export interface PostPageStoryblok {
   text?: RichtextStoryblok;
   component: "post page";
   _uid: string;
-  [k: string]: unknown;
+  [k: string]: any;
 }
 
 export interface TeaserStoryblok {
   headline?: string;
   component: "teaser";
   _uid: string;
-  [k: string]: unknown;
+  [k: string]: any;
 }

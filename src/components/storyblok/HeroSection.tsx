@@ -1,12 +1,13 @@
 import type React from "react";
 import type { HeroSectionStoryblok } from "../../../component-types-sb";
 import {
+  SbBlokData,
   storyblokEditable,
   StoryblokServerComponent,
 } from "@storyblok/react/rsc";
 
 interface HeroSectionProps {
-  blok: HeroSectionStoryblok;
+  blok: HeroSectionStoryblok & SbBlokData;
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({ blok }) => {
