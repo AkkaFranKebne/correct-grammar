@@ -1,11 +1,15 @@
 import type React from "react";
-import { storyblokEditable } from "@storyblok/react/rsc";
+import { storyblokEditable, SbBlokData } from "@storyblok/react/rsc";
 import type { PostPageStoryblok } from "../../../component-types-sb";
 import Image from "next/image";
 import RichText from "./RichText";
 import "./postPage.css";
 
-const PostPage: React.FC<PostPageStoryblok> = ({ blok }) => {
+interface PostPageProps {
+  blok: PostPageStoryblok & SbBlokData;
+}
+
+const PostPage: React.FC<PostPageProps> = ({ blok }) => {
   return (
     <main
       className="container mx-auto px-4 py-8 max-w-7xl"
@@ -19,16 +23,18 @@ const PostPage: React.FC<PostPageStoryblok> = ({ blok }) => {
           </h1>
         </div>
         <div className="order-1 lg:order-2 relative aspect-[4/3] w-full overflow-hidden rounded-lg shadow-lg">
-          <Image
-            src={blok.image.filename}
-            alt={blok.image.meta_data?.alt || blok.title}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover"
-            placeholder="blur"
-            blurDataURL={`${blok.image.filename}/m/100x100/filters:blur(10)`}
-            priority
-          />
+          {
+            <Image
+              src={blok?.image?.filename || ""}
+              alt={blok?.image?.meta_data?.alt || blok.title}
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover"
+              placeholder="blur"
+              blurDataURL={`${blok?.image?.filename}/m/100x100/filters:blur(10)`}
+              priority
+            />
+          }
         </div>
       </section>
 
