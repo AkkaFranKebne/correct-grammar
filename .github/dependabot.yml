@@ -9,6 +9,8 @@ updates:
     rebase-strategy: "auto"
     allow:
       - dependency-type: "direct"
+    ignore:
+      - dependency-name: "nodemailer"
     groups:
       minor-and-patch-updates:
         patterns:
